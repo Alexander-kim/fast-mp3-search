@@ -1,240 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN http://www.w3.org/TR/html4/strict.dtd">
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
 	<head>
-	
-	</body>
-	<script type="text/javascript" src="javascript/jquery-1.7.2.min.js"></script>
-	<script type="text/javascript" src="javascript/scripts.js"></script>
-	<script type="text/javascript" src="javascript/popup.js"></script>
-	<style>
-
-		* { padding: 0px; margin:0px; font-size:14px; font-family:"Helvetica Neue", Helvetica, Arial, sans-serif; }
-
-		li {
-			list-style-type:none;
-		}
-
-		body {
-			background-color:#f8f8f8;
-		}
-
-		#loading {
-			width:100px;
-			margin : 0px auto;
-			padding: 10px 10px 30px 10px;
-			text-align : center;
-		}
-
-		#searchForm {
-			padding: 20px;
-		}
-
-		#popup {
-			width : 600px;
-		}
-
-		#musics span {
-			padding-right : 10px;
-		}
-
-		#musics li {
-			border-radius: 5px;
-			margin : 5px;
-			padding : 10px;
-			cursor: pointer;
-			min-height : 30px;
-		}
-
-		#musics li span {
-			font-size:10px; font-family:verdana;
-		}
-
-		#musics li span b {
-			font-size:10px; font-family:verdana;
-			padding-right : 5px;
-		}
-
-		#musics li:hover {
-			background-color:black;
-			color:white;
-		}
-
-		#sfrm {
-			width: 450px; 
-		}
-
-		.item0{
-			background-color:#d9d9d9;
-		}
-
-		.item1{
-			background-color:#f8f8f8;
-		}
-
-		:-webkit-scrollbar-track-piece{
-			background-color:#f8f8f8;
-			-webkit-border-radius:0;
-		}
-		::-webkit-scrollbar{
-			width:6px;
-			height:6px;
-			background-color:#f8f8f8;
-			padding:1px;
-		}
-		::-webkit-scrollbar-thumb{
-			height:50px;
-			background-color:#999;
-			-webkit-border-radius:4px;
-
-		}
-		::-webkit-scrollbar-thumb:hover{
-			height:50px;
-			background-color:#9f9f9f;
-			-webkit-border-radius:4px;
-		}
-
-		#sfrm{
-			width : 83%;
-			font-size:18px; vertical-align:middle;
-		}
-
-		#search_button{
-			width : 15%;
-			font-size:18px; vertical-align:middle;
-		}
-
-		.shared4 {
-			background-image: url(4shared.png);
-			background-repeat:no-repeat;
-			background-position:right;
-		}
-
-		#autoComplete {
-			background-color: white;
-			width : 450	px;
-			padding: 10px;
-			-webkit-border-radius:4px;
-		}
-		#autoComplete li {
-			padding: 5px;
-			-webkit-border-radius:4px;
-		}
-
-		#autoComplete li:hover {
-			background-color:#f8f8f8;
-		}
-
-	</style>
+	 	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+   	 	<title>Fast mp3 Search!</title>
+		<script type="text/javascript" src="javascript/jquery-1.7.2.min.js"></script>
+		<script type="text/javascript" src="javascript/scripts.js"></script>
+		<script type="text/javascript" src="javascript/popup.js"></script>
+		<link rel="stylesheet" href="css/popup.css" type="text/css" media="screen"/>
 	</head>
 	<body>
 		<div id="popup">
 			<div id="searchForm">
-				<input type="text" name="q" id="sfrm" autocomplete="off" value="" size="60"> 
-				<input type="submit" id="search_button" value="Search" onClick="return do_submit();"><br>
-				<ul id="autoComplete">
-					<li>tocompleta para formulários, semelhante a</li>
-					<li>tocompleta para formulários, semelhante a</li>
-					<li>tocompleta para formulários, semelhante a</li>
-					<li>tocompleta para formulários, semelhante a</li>
-				</ul>
+				<input type="text" id="searchField" /> 
+				<input type="submit" id="searchButton" /><br/>
+				<ul id="autoComplete"></ul>
 			</div>
 			<div>
-				<div id="loading"><img src="loading.gif"/><br>Loading</div>
-				<ul id="musics">
-				</ul>	
+				<div id="loading"><img src="loading.gif" alt="Loading..." /><br/>Loading</div>
+				<ul id="musics"></ul>
 			</div>
 		</div>
 	</body>
-	<script>
-
-	//$.ajax({url:"https://www.google.com.br/s?q=test",complete : function(x){console.log(JSON.parse(x.responseText.replace("window.google.ac.h(",'').replace(')','')))}})
-
-		$("#loading").hide();
-
-		$('#sfrm').focus();
-
-		$('#sfrm').keyup(function(){
-			$.ajax({url:"http://www.google.com.br/s?q="+$('#sfrm').val(),complete : function(x){
-				var values = JSON.parse(x.responseText.replace("window.google.ac.h(",'').replace(')',''))[1];
-				console.log(values);
-
-				var renderList = $.map(values,function(item){
-					return "<li>"+item[0]+"</li>"
-				}).join("");
-
-				$("#autoComplete").html(renderList);
-
-			}})
-		})
-
-		function do_submit()
-		{
-			var q = document.getElementById('sfrm').value;
-			$("#musics").html("");
-			$("#loading").show();
-
-			$.ajax({
-				url : 'http://mp3skull.com/search.php?q=' + escape(q),
-				complete : function(data){
-					$("#loading").hide();
-					var page = data.responseText;
-
-					var aux = $("div[class*=show]",page);
-
-					var musics = $.map($("div[class*=show]",page),function(musica){
-						var item = {};
-						item.nome = $(musica).find('b').text();
-						item.fileUrl = $(musica).find("a").attr("href");
-
-						var moreInfo = $(musica).find('.left').html().replace(/<.*>/,'').replace(/<br>/g,'|').trim().split("|");
-
-						$.map(moreInfo,function(valor){
-							if (valor.indexOf("kbps") != -1){
-								item.bitTrate = valor
-							}
-							if (valor.indexOf("mb") != -1){
-								item.size = valor
-							}
-							if (valor.indexOf(":") != -1){
-								item.length = valor
-							}
-						});
-						return item;
-					})
-					renderResults(musics);
-
-					$("#musics li").click(function(){
-
-						 chrome.tabs.create({'url': $(this).find('.fileUrl').val() }, function(tab) {
-						 	window.close();
-						  });
-
-					})
-				}
-			})
-			
-			return false;
-		}
-
-		function renderResults(musics){
-			var list = "";
-
-			var htmlPure =  $.map(musics,function(music,index){
-				var shared4 = "";
-
-				if (music.fileUrl.indexOf("4shared") != -1)
-					shared4 = " shared4"
-
-				return "<li class=\"item"+index%2+shared4+"\"><b>"+ music.nome + "</b><br>" 
-					+ (music.size != null ?  ("<span><b>Filesize</b>"+music.size+"</span>") : '')
-					+ (music.bitTrate != null ?  ("<span><b>Bitrate</b>"+music.bitTrate+"</span>") : '')
-					+ (music.length != null ?  ("<span><b>Length</b>"+music.length+"</span>") : '')
-					+ '<input type="hidden" class="fileUrl" value="'+music.fileUrl+'">'
-					+ "</li>"
-
-			}).join('');
-
-			$("#musics").html(htmlPure);
-		}
-	</script>
 </html>
