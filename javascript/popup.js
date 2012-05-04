@@ -1,4 +1,7 @@
 $(document).ready(function() {
+	
+	UI.stylishForms();
+	
 	Events.enableFocusCall();
 	Events.submitFormOnEnter();
 	

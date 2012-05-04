@@ -85,6 +85,14 @@ Events.typingInSearchField = function() {
 	return false;
 };
 
+UI = {};
+
+UI.stylishForms = function(){
+    $(function(){
+        $("input, textarea, select, button").uniform();
+    });
+};
+
 function renderResults(musics){
 	var list = "";
 
