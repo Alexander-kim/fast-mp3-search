@@ -1,18 +1,18 @@
 {
    "browser_action": {
-      "default_icon": "logo.png",
+      "default_icon": "images/logo.png",
       "default_title": "Fast MP3 search",
       "popup": "popup.html"
    },
    "content_scripts": [ {
-      "js": [ "zepto.min.js" ],
+      "js": [ "javascript/jquery-1.7.2.min.js" ],
       "matches": [ "http://*/*" ]
    } ],
    "description": "Search songs easily and quickly!",
    "icons": {
-      "128": "icon128.png",
-      "16": "icon16.png",
-      "48": "icon48.png"
+      "128": "images/icon128.png",
+      "16": "images/icon16.png",
+      "48": "images/icon48.png"
    },
    "name": "Fast MP3 search",
    "permissions": [ "tabs", "http://*/*" ],
