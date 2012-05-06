@@ -65,6 +65,7 @@ Events.submitForm = function() {
 	$.ajax({
 		url : 'http://mp3skull.com/search.php?q=' + escape(q),
 		complete : function(data) {
+			$("#autoComplete").hide();
 			$("#loading").hide();
 			var page = data.responseText;
 
@@ -107,7 +108,7 @@ Events.submitForm = function() {
 };
 
 Events.typingInSearchField = function(event) {
-	if (event.keyCode > 47 && event.keyCode < 91){
+	if (event.keyCode > 47 && event.keyCode < 91 || event.keyCode == 8){
 		Events.selectedInAutoComplete = -1;
 		$.ajax({
 			url : "http://clients1.google.com/complete/search?client=youtube-reduced&q="+$('#searchField').val()+"&gs_nf=1&ds=yt&cp=5&gs_id=12&callback=Events.autoCompleteResults",
