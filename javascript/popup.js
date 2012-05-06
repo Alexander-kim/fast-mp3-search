@@ -3,7 +3,7 @@ $(document).ready(function() {
 	UI.stylishForms();
 	
 	Events.enableFocusCall();
-	Events.submitFormOnEnter();
+	Events.submitFormOnEnterAndAutoSearchArrows();
 	
 	$('#searchField').focus();
 	$('#searchField').keyup(Events.typingInSearchField);
