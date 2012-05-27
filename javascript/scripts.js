@@ -111,9 +111,14 @@ Events.typingInSearchField = function(event) {
 	if (event.keyCode > 47 && event.keyCode < 91 || event.keyCode == 8){
 		Events.selectedInAutoComplete = -1;
 		$.ajax({
-			url : "http://clients1.google.com/complete/search?client=youtube-reduced&q="+$('#searchField').val()+"&gs_nf=1&ds=yt&cp=5&gs_id=12&callback=Events.autoCompleteResults",
+			//url : "http://clients1.google.com/complete/search?client=youtube-reduced&q="+$('#searchField').val()+"&gs_nf=1&ds=yt&cp=5&gs_id=12&callback=Events.autoCompleteResults",
+			url: "http://ac1.mp3skull.com/autocomplete/get.php?q="+
+				$('#searchField').val().replace("%20",""),
+
 			complete : function(x){
-				eval(x.responseText);
+				x = x.responseText.match(/new Array.*?\)/)
+				x = "Events.autoCompleteResults(" + x + ")";
+				eval(x);
 			}
 		});
 	}
@@ -121,8 +126,8 @@ Events.typingInSearchField = function(event) {
 };
 
 Events.autoCompleteResults = function(results){
-	var values = $.map(results[1],function(item){
-		return "<li>" + item[0] + "</li>";
+	var values = $.map(results,function(item){
+		return "<li>" + item + "</li>";
 	}).join('');
 	
 	$("#autoComplete ").html(values);
